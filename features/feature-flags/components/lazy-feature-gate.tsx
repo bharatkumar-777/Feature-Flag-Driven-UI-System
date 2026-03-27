@@ -1,28 +1,8 @@
 "use client";
 
 import { ReactNode, Suspense, useMemo, ComponentType } from "react";
-import { useFeatureFlag, useFeatureFlagLoading } from "./hooks";
-
-function DefaultSkeleton() {
-  return (
-    <div className="animate-pulse rounded-lg bg-gray-200 dark:bg-gray-700 h-32 w-full" />
-  );
-}
-
-interface FeatureGateProps {
-  flag: string;
-  children: ReactNode;
-  fallback?: ReactNode;
-}
-
-export function FeatureGate({ flag, children, fallback = null }: FeatureGateProps) {
-  const isEnabled = useFeatureFlag(flag);
-  const isLoading = useFeatureFlagLoading();
-
-  if (isLoading) return <DefaultSkeleton />;
-  if (!isEnabled) return <>{fallback}</>;
-  return <>{children}</>;
-}
+import { useFeatureFlag, useFeatureFlagLoading } from "../hooks/use-feature-flags";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface LazyFeatureGateProps {
   flag: string;
@@ -47,11 +27,13 @@ export function LazyFeatureGate({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isEnabled, loader]);
 
-  if (isLoading) return <>{loadingFallback ?? <DefaultSkeleton />}</>;
+  const shimmer = loadingFallback ?? <Skeleton />;
+
+  if (isLoading) return <>{shimmer}</>;
   if (!isEnabled || !LazyComponent) return <>{fallback}</>;
 
   return (
-    <Suspense fallback={loadingFallback ?? <DefaultSkeleton />}>
+    <Suspense fallback={shimmer}>
       <LazyComponent />
     </Suspense>
   );

@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 const STORAGE_KEY = "dark-mode";
 
-export default function DarkModeToggle() {
+export function DarkModeToggle() {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -35,11 +35,8 @@ export default function DarkModeToggle() {
       </span>
       <span>
         {isDark ? "Dark mode" : "Light mode"}
-        <span className="ml-2 text-xs text-gray-400 dark:text-gray-500 font-normal">
-          — click to switch
-        </span>
+        <span className="ml-2 text-xs text-gray-400 dark:text-gray-500 font-normal">— click to switch</span>
       </span>
-      {/* Visual indicator dot */}
       <span className={`ml-auto h-2 w-2 rounded-full ${isDark ? "bg-indigo-500" : "bg-amber-400"}`} />
     </button>
   );

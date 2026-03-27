@@ -1,4 +1,4 @@
-import { FeatureFlag } from "./types";
+import { FeatureFlag } from "../types";
 
 export const DEFAULT_FLAGS: FeatureFlag[] = [
   {
@@ -35,3 +35,11 @@ export const DEFAULT_FLAGS: FeatureFlag[] = [
 
 export const LOCALSTORAGE_KEY = "feature-flags-cache";
 export const FLAGS_API_URL = "/api/flags";
+
+export const FLAG_ICONS: Record<string, string> = {
+  dark_mode: "🌙",
+  chat_widget: "💬",
+  new_dashboard: "📊",
+  analytics_base: "📈",
+  premium_analytics: "⭐",
+};

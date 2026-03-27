@@ -110,37 +110,56 @@ Flags are polled every 60 seconds by the `FeatureFlagProvider`.
 
 ## File Structure
 
+Enterprise feature-module structure — each feature is self-contained with its own API, store, hooks, components, types, and barrel export.
+
 ```
-app/
-├── page.tsx              # Home page
-├── layout.tsx            # Root layout — dark mode init script + FeatureFlagProvider
-├── globals.css           # Tailwind v4 + class-based dark mode variant
-├── admin/page.tsx        # Admin panel page
-├── dashboard/page.tsx    # Dashboard page (lazy-loaded features)
-└── api/flags/route.ts    # Feature flag API endpoint
+app/                                        # Next.js routing layer (thin, no business logic)
+├── page.tsx                                # Home page
+├── layout.tsx                              # Root layout — dark mode init + FeatureFlagProvider
+├── globals.css                             # Tailwind v4 + class-based dark mode variant
+├── admin/page.tsx                          # Admin panel page
+├── dashboard/page.tsx                      # Dashboard (lazy-loaded feature sections)
+└── api/flags/route.ts                      # GET /api/flags endpoint
 
-lib/feature-flags/
-├── store.ts              # Zustand store — all flag logic
-├── types.ts              # TypeScript interfaces
-├── defaults.ts           # Hardcoded fallback flags + constants
-├── provider.tsx          # React provider — fetches flags, shows fallback toast
-├── hooks.ts              # useFeatureFlag, useFeatureFlags, etc.
-└── components.tsx        # FeatureGate, LazyFeatureGate
+features/                                   # Self-contained feature modules
+├── feature-flags/                          # Core feature flag system
+│   ├── api/flags-api.ts                   # Fetch logic isolated from store
+│   ├── components/
+│   │   ├── admin/
+│   │   │   ├── flag-panel.tsx             # Admin panel — stats, sections, controls
+│   │   │   └── flag-toggle.tsx            # Individual flag row with toggle switch
+│   │   ├── feature-gate.tsx               # Synchronous gate (<FeatureGate>)
+│   │   ├── lazy-feature-gate.tsx          # Code-split gate (<LazyFeatureGate>)
+│   │   └── fallback.tsx                   # Disabled-feature UI with link to Admin
+│   ├── constants/index.ts                 # Default flags, localStorage key, flag icons
+│   ├── hooks/use-feature-flags.ts         # useFeatureFlag, useFeatureFlags, etc.
+│   ├── provider/feature-flag-provider.tsx # Fetches flags, polls, shows fallback toast
+│   ├── store/feature-flag-store.ts        # Zustand store — all flag state + actions
+│   ├── types/index.ts                     # FeatureFlag, FlagState, FlagStore types
+│   └── index.ts                           # Public API barrel export
+│
+├── dark-mode/
+│   ├── components/dark-mode-toggle.tsx    # Toggle button with localStorage persistence
+│   └── index.ts
+│
+├── chat/
+│   ├── components/chat-widget.tsx         # Floating chat panel
+│   └── index.ts
+│
+├── analytics/
+│   ├── components/analytics-chart.tsx     # Base weekly bar chart
+│   ├── components/premium-analytics-chart.tsx  # Pro metrics (lazy-loaded)
+│   └── index.ts
+│
+└── new-dashboard/
+    ├── components/new-dashboard-view.tsx  # Redesigned stat cards (lazy-loaded)
+    └── index.ts
 
-components/
-├── features/
-│   ├── dark-mode.tsx         # Dark mode toggle (localStorage-persisted)
-│   ├── chat-widget.tsx       # Chat support widget
-│   ├── analytics.tsx         # Base analytics bar chart
-│   ├── premium-analytics.tsx # Advanced analytics (lazy-loaded)
-│   └── new-dashboard.tsx     # Redesigned dashboard (lazy-loaded)
-├── admin/
-│   ├── flag-panel.tsx        # Admin panel — stats, sections, controls
-│   └── flag-toggle.tsx       # Individual flag row with toggle switch
-├── ui/
-│   ├── skeleton.tsx          # Loading skeleton component
-│   └── toast.tsx             # Toast notification
-└── fallback.tsx              # Disabled-feature UI with Admin link
+components/                                 # Shared UI primitives (no business logic)
+└── ui/
+    ├── skeleton.tsx                        # Loading skeleton
+    ├── toast.tsx                           # Toast notification
+    └── index.ts                            # Barrel export
 ```
 
 ---

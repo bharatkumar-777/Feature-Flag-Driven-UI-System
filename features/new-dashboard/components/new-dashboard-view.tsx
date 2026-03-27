@@ -1,6 +1,6 @@
 "use client";
 
-export default function NewDashboard() {
+export default function NewDashboardView() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       <div className="rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white shadow-lg">

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export default function ChatWidget() {
+export function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -12,9 +12,7 @@ export default function ChatWidget() {
           <div className="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 px-4 py-3">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-green-500" />
-              <span className="text-sm font-semibold text-gray-900 dark:text-white">
-                Live Support
-              </span>
+              <span className="text-sm font-semibold text-gray-900 dark:text-white">Live Support</span>
             </div>
             <button
               onClick={() => setIsOpen(false)}
@@ -26,9 +24,7 @@ export default function ChatWidget() {
           <div className="h-64 p-4 overflow-y-auto">
             <div className="flex flex-col gap-3">
               <div className="self-start max-w-[80%] rounded-lg bg-gray-100 dark:bg-gray-800 px-3 py-2">
-                <p className="text-sm text-gray-700 dark:text-gray-300">
-                  Hi! How can we help you today?
-                </p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">Hi! How can we help you today?</p>
               </div>
             </div>
           </div>

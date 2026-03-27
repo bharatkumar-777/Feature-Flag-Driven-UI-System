@@ -1,15 +1,8 @@
 "use client";
 
-import { FeatureFlag } from "@/lib/feature-flags/types";
-import { useFeatureFlagStore } from "@/lib/feature-flags/store";
-
-const FLAG_ICONS: Record<string, string> = {
-  dark_mode: "🌙",
-  chat_widget: "💬",
-  new_dashboard: "📊",
-  analytics_base: "📈",
-  premium_analytics: "⭐",
-};
+import { FeatureFlag } from "../../types";
+import { useFeatureFlagStore } from "../../store/feature-flag-store";
+import { FLAG_ICONS } from "../../constants";
 
 interface FlagToggleProps {
   flag: FeatureFlag;
@@ -31,12 +24,10 @@ export function FlagToggle({ flag, parentsMet, dependents }: FlagToggleProps) {
       } ${isDisabled ? "opacity-50" : ""}`}
     >
       <div className="flex items-center gap-3">
-        {/* Icon */}
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-100 dark:bg-gray-800 text-lg">
           {FLAG_ICONS[flag.name] ?? "🔲"}
         </span>
 
-        {/* Info */}
         <div className="flex-1 min-w-0">
           <div className="flex flex-wrap items-center gap-1.5">
             <span className="font-mono text-sm font-semibold text-gray-900 dark:text-white">
@@ -55,7 +46,6 @@ export function FlagToggle({ flag, parentsMet, dependents }: FlagToggleProps) {
           </div>
           <p className="mt-0.5 text-xs text-gray-500 dark:text-gray-400">{flag.description}</p>
 
-          {/* Warnings */}
           {isDisabled && (
             <p className="mt-1 text-[11px] text-amber-600 dark:text-amber-400 flex items-center gap-1">
               <span>⚠️</span> Enable{" "}
@@ -70,7 +60,6 @@ export function FlagToggle({ flag, parentsMet, dependents }: FlagToggleProps) {
           )}
         </div>
 
-        {/* Toggle */}
         <button
           onClick={() => toggleFlag(flag.name)}
           disabled={isDisabled}

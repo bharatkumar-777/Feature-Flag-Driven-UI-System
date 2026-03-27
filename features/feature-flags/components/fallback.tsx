@@ -4,7 +4,7 @@ interface FallbackProps {
   feature?: string;
 }
 
-export default function Fallback({ feature }: FallbackProps) {
+export function Fallback({ feature }: FallbackProps) {
   return (
     <div className="flex items-center gap-4 rounded-xl border border-dashed border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/30 px-5 py-4">
       <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-700 text-base">

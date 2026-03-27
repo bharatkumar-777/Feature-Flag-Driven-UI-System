@@ -1,6 +1,7 @@
 import { create } from "zustand";
-import { FlagStore, FeatureFlag } from "./types";
-import { DEFAULT_FLAGS, LOCALSTORAGE_KEY, FLAGS_API_URL } from "./defaults";
+import { FlagStore, FeatureFlag } from "../types";
+import { DEFAULT_FLAGS, LOCALSTORAGE_KEY } from "../constants";
+import { fetchFeatureFlags } from "../api/flags-api";
 
 function arrayToRecord(flags: FeatureFlag[]): Record<string, FeatureFlag> {
   const record: Record<string, FeatureFlag> = {};
@@ -38,7 +39,6 @@ function cascadeDisable(
 ): Record<string, FeatureFlag> {
   if (visited.has(disabledName)) return flags;
   visited.add(disabledName);
-
   for (const flag of Object.values(flags)) {
     if (flag.depends_on.includes(disabledName) && flag.enabled) {
       flags[flag.name] = { ...flag, enabled: false };
@@ -72,35 +72,17 @@ export const useFeatureFlagStore = create<FlagStore>((set, get) => ({
   fetchFlags: async () => {
     set({ isLoading: true, error: null });
     try {
-      const res = await fetch(FLAGS_API_URL);
-      if (!res.ok) throw new Error(`API returned ${res.status}`);
-      const data: FeatureFlag[] = await res.json();
+      const data = await fetchFeatureFlags();
       const flags = arrayToRecord(data);
       saveFlagsToCache(flags);
-      set({
-        flags,
-        isLoading: false,
-        isFallback: false,
-        lastFetched: Date.now(),
-        error: null,
-      });
+      set({ flags, isLoading: false, isFallback: false, lastFetched: Date.now(), error: null });
     } catch (err) {
       const errorMsg = err instanceof Error ? err.message : "Failed to fetch flags";
       const cached = loadCachedFlags();
       if (cached) {
-        set({
-          flags: cached,
-          isLoading: false,
-          isFallback: true,
-          error: errorMsg,
-        });
+        set({ flags: cached, isLoading: false, isFallback: true, error: errorMsg });
       } else {
-        set({
-          flags: arrayToRecord(DEFAULT_FLAGS),
-          isLoading: false,
-          isFallback: true,
-          error: errorMsg,
-        });
+        set({ flags: arrayToRecord(DEFAULT_FLAGS), isLoading: false, isFallback: true, error: errorMsg });
       }
     }
   },
@@ -114,11 +96,9 @@ export const useFeatureFlagStore = create<FlagStore>((set, get) => ({
     const newEnabled = !flag.enabled;
 
     if (newEnabled) {
-      // Enabling: check all parents are enabled
       if (!allParentsEnabled(name, newFlags)) return;
       newFlags[name] = { ...flag, enabled: true };
     } else {
-      // Disabling: cascade disable all dependents
       newFlags[name] = { ...flag, enabled: false };
       cascadeDisable(newFlags, name);
     }

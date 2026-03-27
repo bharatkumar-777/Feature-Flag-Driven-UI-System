@@ -1,19 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { FeatureGate } from "@/lib/feature-flags/components";
-import { useFeatureFlagLoading, useFeatureFlags } from "@/lib/feature-flags/hooks";
-import DarkModeToggle from "@/components/features/dark-mode";
-import ChatWidget from "@/components/features/chat-widget";
-import Fallback from "@/components/fallback";
-
-const FLAG_ICONS: Record<string, string> = {
-  dark_mode: "🌙",
-  chat_widget: "💬",
-  new_dashboard: "📊",
-  analytics_base: "📈",
-  premium_analytics: "⭐",
-};
+import { FeatureGate, Fallback, useFeatureFlagLoading, useFeatureFlags } from "@/features/feature-flags";
+import { DarkModeToggle } from "@/features/dark-mode";
+import { ChatWidget } from "@/features/chat";
+import { FLAG_ICONS } from "@/features/feature-flags";
 
 export default function HomePage() {
   const isLoading = useFeatureFlagLoading();

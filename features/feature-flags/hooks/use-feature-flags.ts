@@ -1,7 +1,7 @@
 "use client";
 
-import { useFeatureFlagStore } from "./store";
-import { FeatureFlag } from "./types";
+import { useFeatureFlagStore } from "../store/feature-flag-store";
+import { FeatureFlag } from "../types";
 
 export function useFeatureFlag(flagName: string): boolean {
   return useFeatureFlagStore((state) => state.getFlagEnabled(flagName));

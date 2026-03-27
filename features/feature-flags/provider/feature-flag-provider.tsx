@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, ReactNode, useState } from "react";
-import { useFeatureFlagStore } from "./store";
-import { useIsFallback } from "./hooks";
+import { useFeatureFlagStore } from "../store/feature-flag-store";
+import { useIsFallback } from "../hooks/use-feature-flags";
 import { Toast } from "@/components/ui/toast";
 
-const POLL_INTERVAL = 60000; // 60 seconds
+const POLL_INTERVAL = 60_000; // 60 seconds
 
 export function FeatureFlagProvider({ children }: { children: ReactNode }) {
   const fetchFlags = useFeatureFlagStore((s) => s.fetchFlags);
@@ -14,7 +14,6 @@ export function FeatureFlagProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     fetchFlags();
-
     const interval = setInterval(fetchFlags, POLL_INTERVAL);
     return () => clearInterval(interval);
   }, [fetchFlags]);

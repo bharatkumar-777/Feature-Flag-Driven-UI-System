@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { LazyFeatureGate } from "@/lib/feature-flags/components";
+import { LazyFeatureGate, Fallback } from "@/features/feature-flags";
 import { Skeleton } from "@/components/ui/skeleton";
-import Fallback from "@/components/fallback";
 
 export default function DashboardPage() {
   return (
@@ -38,13 +37,10 @@ export default function DashboardPage() {
         <div className="space-y-8">
           {/* New Dashboard */}
           <section>
-            <SectionHeader
-              title="New Dashboard"
-              flag="new_dashboard"
-            />
+            <SectionHeader title="New Dashboard" flag="new_dashboard" />
             <LazyFeatureGate
               flag="new_dashboard"
-              loader={() => import("@/components/features/new-dashboard")}
+              loader={() => import("@/features/new-dashboard/components/new-dashboard-view")}
               loadingFallback={<Skeleton className="h-32 w-full" />}
               fallback={<Fallback feature="new_dashboard" />}
             />
@@ -52,13 +48,10 @@ export default function DashboardPage() {
 
           {/* Analytics */}
           <section>
-            <SectionHeader
-              title="Analytics"
-              flag="analytics_base"
-            />
+            <SectionHeader title="Analytics" flag="analytics_base" />
             <LazyFeatureGate
               flag="analytics_base"
-              loader={() => import("@/components/features/analytics")}
+              loader={() => import("@/features/analytics/components/analytics-chart")}
               loadingFallback={<Skeleton className="h-48 w-full" />}
               fallback={<Fallback feature="analytics_base" />}
             />
@@ -66,14 +59,10 @@ export default function DashboardPage() {
 
           {/* Premium Analytics */}
           <section>
-            <SectionHeader
-              title="Premium Analytics"
-              flag="premium_analytics"
-              dependency="analytics_base"
-            />
+            <SectionHeader title="Premium Analytics" flag="premium_analytics" dependency="analytics_base" />
             <LazyFeatureGate
               flag="premium_analytics"
-              loader={() => import("@/components/features/premium-analytics")}
+              loader={() => import("@/features/analytics/components/premium-analytics-chart")}
               loadingFallback={<Skeleton className="h-48 w-full" />}
               fallback={<Fallback feature="premium_analytics" />}
             />

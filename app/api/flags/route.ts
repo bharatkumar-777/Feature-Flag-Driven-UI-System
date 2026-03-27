@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { FeatureFlag } from "@/lib/feature-flags/types";
+import { FeatureFlag } from "@/features/feature-flags/types";
 
 const FLAGS: FeatureFlag[] = [
   {
@@ -42,10 +42,7 @@ export async function GET(request: NextRequest) {
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   if (shouldFail) {
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 
   return NextResponse.json(FLAGS);

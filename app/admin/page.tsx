@@ -1,5 +1,5 @@
-import { FlagPanel } from "@/components/admin/flag-panel";
 import Link from "next/link";
+import { FlagPanel } from "@/features/feature-flags";
 
 export default function AdminPage() {
   return (
@@ -8,7 +8,10 @@ export default function AdminPage() {
       <nav className="sticky top-0 z-10 border-b border-gray-200 dark:border-gray-800 bg-white/80 dark:bg-gray-950/80 backdrop-blur-sm">
         <div className="container mx-auto max-w-3xl px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Link href="/" className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors">
+            <Link
+              href="/"
+              className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+            >
               ← Home
             </Link>
             <span className="text-gray-300 dark:text-gray-700">/</span>
